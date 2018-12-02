@@ -45,19 +45,52 @@ function addContent1(){
 }
 
 //2nd
+//pie
 function addContent2(){
   let num = 1;
+
+  //for the pie
+  const data = [{value: 23}, {value: 56}];
+  const r = cwW/3;
+
   //change class to calWindowOpen
   d3.select(calWindows[num].node())
-    .attr("class", "calWindowOpen")
+    .attr("class", "calWindowOpen");
 
-  d3.select(calWindows[num]._groups[0][0].childNodes[1])
-  .append("circle")
-  .attr("cx",100)
-  .attr("cy", 100)
-  .attr("r", 50)
-  .attr("fill", "blue")
-  
+  //SVG container for the elements
+  const svg = d3.select(calWindows[num]._groups[0][0].childNodes[1]);
+
+  //Group for the pie
+  const pieGroup = svg.append("g")
+    // .attr("transform", `translate(${width / 2},${height / 2})`);
+           .attr("transform", "translate("+(cwW/2)+","+(cwH/2.5)+")");
+
+  //create colorScale
+  let colorScale = d3.scaleOrdinal()
+                    .range(["orange","forestGreen"])
+
+
+  //arcs
+  const pie = d3.pie()
+      .sort(null)
+      .value(d => d.value)
+
+  const arcs = pie(data);
+
+  arc = d3.arc()
+    .innerRadius(0)
+    .outerRadius(r)
+
+
+  //paths
+  const path = pieGroup.selectAll("path")
+                      .data(arcs)
+                      .enter()
+                      .append("path")
+                      .attr("fill",(d,i) => {return colorScale(i)})
+                      .attr("stroke","white")
+                      .attr("d", arc)
+
 }
 
 
