@@ -1,0 +1,42 @@
+h1 {
+  text-transform: uppercase;
+  text-align: center;
+  font-family: fantasy;
+}
+
+
+#calendar {
+  /* background-color: tomato; */
+  width: 80%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-content: space-between;
+  margin: auto;
+}
+
+
+/* Styling calendar windows */
+.calWindowClosed {
+  /* border: solid black 1px; */
+  width: 200px;
+  height: 200px;
+  background-color: lightBlue;
+  margin: 10px;
+}
+
+.calTitle {
+  text-align: center;
+  line-height: 30px;
+  height: 30px;
+  font-family: fantasy;
+  font-size: 20px;
+}
+
+.calWindowOpen {
+  /* border: solid black 1px; */
+  width: 200px;
+  height: 200px;
+  background-color: yellow;
+  margin: 10px;
+}
