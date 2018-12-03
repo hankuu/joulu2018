@@ -28,8 +28,9 @@ for (let i = 0; i < 24; i++) {
 
 }
 
-
-//1st
+//////////////////////////
+// 1st: simple circle
+//////////////////////////
 function addContent1(){
   let num = 0;
   //change class to calWindowOpen
@@ -44,8 +45,9 @@ function addContent1(){
   .attr("fill", "blue")
 }
 
-//2nd
-//pie
+//////////////////////////
+// 2nd: pie
+//////////////////////////
 function addContent2(){
   let num = 1;
 
@@ -62,13 +64,12 @@ function addContent2(){
 
   //Group for the pie
   const pieGroup = svg.append("g")
-    // .attr("transform", `translate(${width / 2},${height / 2})`);
-           .attr("transform", "translate("+(cwW/2)+","+(cwH/2.5)+")");
+    .attr("transform", `translate(${cwW / 2},${cwH / 2.5})`);
+// .attr("transform", "translate("+(cwW/2)+","+(cwH/2.5)+")");
 
   //create colorScale
   let colorScale = d3.scaleOrdinal()
                     .range(["orange","forestGreen"])
-
 
   //arcs
   const pie = d3.pie()
@@ -90,10 +91,71 @@ function addContent2(){
                       .attr("fill",(d,i) => {return colorScale(i)})
                       .attr("stroke","white")
                       .attr("d", arc)
+} //2nd
 
-}
+
+//////////////////////////
+// 3rd: simple bars
+//////////////////////////
+function addContent3(){
+  let num = 2;
+  //change class to calWindowOpen
+  d3.select(calWindows[num].node())
+    .attr("class", "calWindowOpen")
+
+  let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
+
+
+  //data for bars
+  const data = [
+    {name: "A", value: 12},
+    {name: "B", value: 22},
+    {name: "C", value: 2},
+  ]
+
+  //bars
+  let margin = {
+    top: 10,
+    right: 10,
+    bottom: 10,
+    left: 20
+  }
+  let height = cwH - titlePadding - margin.top - margin.bottom;
+  let width = cwW - margin.left - margin.right;
+
+
+  //scales
+  let yScale = d3.scaleBand()
+        .range([height, 0])
+        .domain(data.map(d => d.name))
+        .padding(0.2);
+
+  calWin.append("g")
+    .attr("transform", `translate(${margin.left},0)`)
+    .call(d3.axisLeft(yScale));
+
+  let xScale = d3.scaleLinear()
+        .range([0, width])
+        .domain(d3.extent(data, function(d){ return d.value; }))
+
+  calWin.append("g")
+    .attr("transform", `translate(${margin.left},${height})`)
+    .call(d3.axisBottom(xScale))
+
+
+  let barGroup = calWin
+    .append("g")
+
+
+  .append("circle")
+  .attr("cx",150)
+  .attr("cy", 150)
+  .attr("r", 50)
+  .attr("fill", "orange")
+} //3rd
 
 
 //Calling content creators
 addContent1();
 addContent2();
+addContent3();
