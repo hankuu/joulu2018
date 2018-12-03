@@ -37,6 +37,10 @@ function addContent1(){
   d3.select(calWindows[num].node())
     .attr("class", "calWindowOpen")
 
+    //change title
+    d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("1: simple circle")
+
+
   d3.select(calWindows[num]._groups[0][0].childNodes[1])
   .append("circle")
   .attr("cx",100)
@@ -58,6 +62,10 @@ function addContent2(){
   //change class to calWindowOpen
   d3.select(calWindows[num].node())
     .attr("class", "calWindowOpen");
+
+  //change title
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("2: pie")
+
 
   //SVG container for the elements
   const svg = d3.select(calWindows[num]._groups[0][0].childNodes[1]);
@@ -103,6 +111,8 @@ function addContent3(){
   d3.select(calWindows[num].node())
     .attr("class", "calWindowOpen")
 
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("3: bars with hover")
+
   let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
 
 
@@ -123,6 +133,29 @@ function addContent3(){
   let height = cwH - titlePadding - margin.top - margin.bottom;
   let width = cwW - margin.left - margin.right;
 
+  function toCircle(){
+    let me = d3.select(this);
+
+    let y = +(me.attr("y")) + (+(me.attr("height"))/2);
+    let area = +(me.attr("height")) * +(me.attr("width"));
+
+    calWin.append("circle")
+      .attr("cx",width - width/4)
+      .attr("cy",y)
+      .attr("r", Math.sqrt(area / Math.PI))
+      .attr("fill", me.attr("fill"))
+
+      me.attr("fill","transparent")
+
+  }
+
+  function toRect(){
+    let me = d3.select(this);
+    me.attr("fill",d => colorScale(d.value))
+
+    calWin.selectAll("circle").remove();
+
+  }
 
   //scales
   let yScale = d3.scaleBand()
@@ -130,28 +163,37 @@ function addContent3(){
         .domain(data.map(d => d.name))
         .padding(0.2);
 
-  calWin.append("g")
-    .attr("transform", `translate(${margin.left},0)`)
-    .call(d3.axisLeft(yScale));
-
   let xScale = d3.scaleLinear()
         .range([0, width])
-        .domain(d3.extent(data, function(d){ return d.value; }))
+        .domain([0, d3.max(data, function(d){ return d.value; })]);
 
-  calWin.append("g")
-    .attr("transform", `translate(${margin.left},${height})`)
-    .call(d3.axisBottom(xScale))
-
+  let colorScale = d3.scaleSequential(d3.interpolateOranges)
+          // .domain([d3.max(data, function(d){ return d.value; }),0]);
+          .domain([-10, d3.max(data, function(d){ return d.value; })]);
 
   let barGroup = calWin
     .append("g")
+    .selectAll("rect")
+    .data(data)
+    .enter()
+    .append("rect")
+    .attr("x", margin.left)
+    .attr("y", d => yScale(d.name))
+    .attr("height", yScale.bandwidth())
+    .attr("width", d => (xScale(d.value)))
+    .attr("fill", d => colorScale(d.value))
+    .on("mouseover",toCircle)
+    .on("mouseout",toRect);
 
+    //Add axes on top
+    calWin.append("g")
+      .attr("transform", `translate(${margin.left},0)`)
+      .call(d3.axisLeft(yScale));
 
-  .append("circle")
-  .attr("cx",150)
-  .attr("cy", 150)
-  .attr("r", 50)
-  .attr("fill", "orange")
+    calWin.append("g")
+      .attr("transform", `translate(${margin.left},${height})`)
+      .call(d3.axisBottom(xScale))
+
 } //3rd
 
 

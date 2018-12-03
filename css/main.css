@@ -4,6 +4,12 @@ h1 {
   font-family: fantasy;
 }
 
+p {
+  text-align: center;
+  font-family: sans-serif;
+}
+
+
 
 #calendar {
   /* background-color: tomato; */
