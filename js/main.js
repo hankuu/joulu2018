@@ -29,6 +29,15 @@ for (let i = 0; i < 24; i++) {
 }
 
 //////////////////////////
+// Utils
+//////////////////////////
+function randomBetween(low, high){
+  return Math.floor(Math.random()*(high-low+1)+low);
+}
+
+
+
+//////////////////////////
 // 1st: simple circle
 //////////////////////////
 function addContent1(){
@@ -47,7 +56,7 @@ function addContent1(){
   .attr("cy", 100)
   .attr("r", 50)
   .attr("fill", "blue")
-}
+}//1st
 
 //////////////////////////
 // 2nd: pie
@@ -196,8 +205,87 @@ function addContent3(){
 
 } //3rd
 
+//////////////////////////
+// 4th: random squares
+//////////////////////////
+function addContent4(){
+  let num = 3;
+  //change class to calWindowOpen
+  d3.select(calWindows[num].node())
+    .attr("class", "calWindowOpen")
+
+    //change title
+    d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("4: random squares")
+
+  //pick random point within padded area
+  let padding = 10;
+
+let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
+
+let width = +calWin.attr("width")
+let height = +calWin.attr("height")
+
+let random = {
+  x: randomBetween(padding, width - padding),
+  y: randomBetween(padding, height - padding)
+}
+
+//colorScale
+let colorScale = d3.scaleSequential(d3.interpolateWarm)
+        .domain([0,width*height]);
+
+
+
+  calWin.append("rect")
+  .attr("x",0)
+  .attr("y",0)
+  .attr("width", random.x)
+  .attr("height", random.y)
+  .attr("fill", colorScale(random.x*random.y))
+
+  calWin.append("rect")
+  .attr("x",random.x)
+  .attr("y", random.y)
+  .attr("width", width - random.x)
+  .attr("height", height - random.y)
+  .attr("fill", colorScale((width-random.x)*(height -random.y)))
+
+  calWin.append("rect")
+  .attr("x",random.x)
+  .attr("y", 0)
+  .attr("width", width - random.x)
+  .attr("height", random.y)
+  .attr("fill", colorScale((width - random.x)*random.y))
+
+  calWin.append("rect")
+  .attr("x",0)
+  .attr("y", random.y)
+  .attr("width", random.x)
+  .attr("height", height - random.y)
+  .attr("fill", colorScale(random.x*(height - random.y)))
+
+  calWin.append("line")
+  .attr("x1", random.x)
+  .attr("y1", 0)
+  .attr("x2", random.x)
+  .attr("y2", height)
+  .attr("stroke", "white")
+  .attr("stroke-width",5)
+
+  calWin.append("line")
+  .attr("x1", 0)
+  .attr("y1", random.y)
+  .attr("x2", width)
+  .attr("y2", random.y)
+  .attr("stroke", "white")
+  .attr("stroke-width",5)
+
+
+}//4th
+
 
 //Calling content creators
 addContent1();
 addContent2();
 addContent3();
+addContent4();
