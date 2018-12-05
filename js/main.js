@@ -351,17 +351,17 @@ function addContent5(){
     {"id": "violet"}
   ],
   "links": [
-    {"source": "red", "target": "orange", "id": "black"},
-    {"source": "orange", "target": "yellow", "id": "black"},
-    {"source": "yellow", "target": "blue", "id": "black"},
-    {"source": "blue", "target": "violet", "id": "black"},
-    {"source": "violet", "target": "red", "id": "black"},
+    {"source": "red", "target": "orange", "place": "in"},
+    {"source": "orange", "target": "yellow", "place": "in"},
+    {"source": "yellow", "target": "blue", "place": "in"},
+    {"source": "blue", "target": "violet", "place": "in"},
+    {"source": "violet", "target": "red", "place": "in"},
 
-    {"source": "red", "target": "yellow", "id": "white"},
-    {"source": "red", "target": "blue", "id": "white"},
-    {"source": "yellow", "target": "violet", "id": "white"},
-    {"source": "orange", "target": "blue", "id": "white"},
-    {"source": "orange", "target": "violet", "id": "white"}
+    {"source": "red", "target": "yellow", "place": "out"},
+    {"source": "red", "target": "blue", "place": "out"},
+    {"source": "yellow", "target": "violet", "place": "out"},
+    {"source": "orange", "target": "blue", "place": "out"},
+    {"source": "orange", "target": "violet", "place": "out"}
   ]
 }
 
@@ -374,8 +374,7 @@ link = link
     .data(data.links)
     .enter()
     .append("line")
-    .attr("class", function(d) {return d.id==="white" ? "out" : "link"})
-    .attr("stroke", function(d) { return d.id;} );
+    .attr("class", function(d) {return d.place==="out" ? "out" : "link"});
 
 
   function ticked() {
