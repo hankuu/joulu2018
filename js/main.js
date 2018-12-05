@@ -284,10 +284,115 @@ let colorScale = d3.scaleSequential(d3.interpolateWarm)
 }//4th
 
 //////////////////////////
-// 5th: contour
+// 5th: node-link
+// Help:
+// node-links https://bl.ocks.org/mbostock/533daf20348023dfdd76
+// linear grads http://bl.ocks.org/pnavarrc/20950640812489f13246
 //////////////////////////
 function addContent5(){
   let num = 4;
+  //change class to calWindowOpen
+  d3.select(calWindows[num].node())
+    .attr("class", "calWindowOpen")
+
+  //change title
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("5: node-link")
+
+  //Container
+  let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
+  let width = +calWin.attr("width")
+  let height = +calWin.attr("height")
+
+  //Bit of background
+  calWin.append("rect")
+  .attr("x",0)
+  .attr("y",0)
+  .attr("width", width)
+  .attr("height", height)
+  .attr("fill","black")
+
+
+  // Create the svg:defs element and the main gradient definition.
+ var svgDefs = calWin.append('defs');
+
+ var mainGradient = svgDefs.append('linearGradient')
+     .attr('id', 'mainGradient');
+
+ // Create the stops of the main gradient
+ mainGradient.append('stop')
+     .attr('class', 'stop-end')
+     .attr('offset', '0.2');
+
+ mainGradient.append('stop')
+     .attr('class', 'stop-middle')
+     .attr('offset', '0.5');
+
+ mainGradient.append('stop')
+     .attr('class', 'stop-end')
+     .attr('offset', '0.8');
+
+     //D3 force
+  let simulation = d3.forceSimulation()
+    .force("charge", d3.forceManyBody().strength(-200))
+    .force("link", d3.forceLink().id(function(d) { return d.id; }).distance(100))
+    .force("x", d3.forceX(width / 2))
+    .force("y", d3.forceY(height / 2))
+    .on("tick", ticked);
+
+  let link = calWin.selectAll(".link")
+
+  //data
+  let data = {
+  "nodes": [
+    {"id": "red"},
+    {"id": "orange"},
+    {"id": "yellow"},
+    {"id": "blue"},
+    {"id": "violet"}
+  ],
+  "links": [
+    {"source": "red", "target": "orange", "id": "black"},
+    {"source": "orange", "target": "yellow", "id": "black"},
+    {"source": "yellow", "target": "blue", "id": "black"},
+    {"source": "blue", "target": "violet", "id": "black"},
+    {"source": "violet", "target": "red", "id": "black"},
+
+    {"source": "red", "target": "yellow", "id": "white"},
+    {"source": "red", "target": "blue", "id": "white"},
+    {"source": "yellow", "target": "violet", "id": "white"},
+    {"source": "orange", "target": "blue", "id": "white"},
+    {"source": "orange", "target": "violet", "id": "white"}
+  ]
+}
+
+simulation.nodes(data.nodes)
+simulation.force("link")
+  .links(data.links)
+
+//drawing only links
+link = link
+    .data(data.links)
+    .enter()
+    .append("line")
+    .attr("class", function(d) {return d.id==="white" ? "out" : "link"})
+    .attr("stroke", function(d) { return d.id;} );
+
+
+  function ticked() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+  }
+
+}//5th
+
+
+//////////////////////////
+// 6th: contour
+//////////////////////////
+function addContent6(){
+  let num = 5;
   //change class to calWindowOpen
   d3.select(calWindows[num].node())
     .attr("class", "calWindowOpen")
@@ -317,7 +422,7 @@ function addContent5(){
       .attr("stroke","black");
       // .attr("fill", function(d) { return color(d.value); });
 
-}//5th
+}//6th
 
 //////////////////////////
 //
@@ -350,4 +455,4 @@ addContent1();
 addContent2();
 addContent3();
 addContent4();
-//addContent5();
+addContent5();
