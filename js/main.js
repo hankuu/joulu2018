@@ -283,9 +283,71 @@ let colorScale = d3.scaleSequential(d3.interpolateWarm)
 
 }//4th
 
+//////////////////////////
+// 5th: contour
+//////////////////////////
+function addContent5(){
+  let num = 4;
+  //change class to calWindowOpen
+  d3.select(calWindows[num].node())
+    .attr("class", "calWindowOpen")
+
+  //change title
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("1: circle / ympyrä")
+
+  //get container
+  let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
+  let width = +calWin.attr("width")
+  let height = +calWin.attr("height")
+  // let padding = 10;
+
+  //data
+  let data = {"values": [103,104,104,105,105,106,106,106,107,107,106,106,105,105,104]}
+
+  calWin.selectAll("path")
+    .data(d3.contours()
+        .size([width, height])
+        // .size([volcano.width, volcano.height])
+        .thresholds(d3.range(90, 195, 5))
+      (data.values))
+    .enter().append("path")
+      // .attr("d", d3.geoPath(d3.geoIdentity().scale(width / volcano.width)))
+      .attr("d", d3.geoPath(d3.geoIdentity().scale(1)))
+      .attr("fill", "lightBlue")
+      .attr("stroke","black");
+      // .attr("fill", function(d) { return color(d.value); });
+
+}//5th
+
+//////////////////////////
+//
+//////////////////////////
+function addContent(){
+  let num = 0;
+  //change class to calWindowOpen
+  d3.select(calWindows[num].node())
+    .attr("class", "calWindowOpen")
+
+  //change title
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("1: circle / ympyrä")
+
+  let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
+
+  let width = +calWin.attr("width")
+  let height = +calWin.attr("height")
+
+
+  calWin.append("circle")
+  .attr("cx", 100)
+  .attr("cy", 100)
+  .attr("r", 50)
+  .attr("fill", "blue")
+}//
+
 
 //Calling content creators
 addContent1();
 addContent2();
 addContent3();
 addContent4();
+//addContent5();
