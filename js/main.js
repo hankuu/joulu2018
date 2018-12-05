@@ -47,12 +47,11 @@ function addContent1(){
     .attr("class", "calWindowOpen")
 
     //change title
-    d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("1: simple circle")
-
+    d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("1: circle / ympyrä")
 
   d3.select(calWindows[num]._groups[0][0].childNodes[1])
   .append("circle")
-  .attr("cx",100)
+  .attr("cx", 100)
   .attr("cy", 100)
   .attr("r", 50)
   .attr("fill", "blue")
@@ -65,7 +64,7 @@ function addContent2(){
   let num = 1;
 
   //for the pie
-  const data = [{value: 23}, {value: 56}];
+  const data = [{value: randomBetween(10,100)}, {value: randomBetween(10,100)}];
   const r = cwW/3;
 
   //change class to calWindowOpen
@@ -107,6 +106,7 @@ function addContent2(){
                       .append("path")
                       .attr("fill",(d,i) => {return colorScale(i)})
                       .attr("stroke","white")
+                      .attr("stroke-width",5)
                       .attr("d", arc)
 } //2nd
 
@@ -120,7 +120,7 @@ function addContent3(){
   d3.select(calWindows[num].node())
     .attr("class", "calWindowOpen")
 
-  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("3: bars with hover")
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("3: bars / palkit: hover")
 
   let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
 
@@ -215,7 +215,7 @@ function addContent4(){
     .attr("class", "calWindowOpen")
 
     //change title
-    d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("4: random squares")
+    d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("4: squares / neliöt")
 
   //pick random point within padded area
   let padding = 10;
