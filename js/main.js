@@ -414,47 +414,52 @@ function addContent6(){
   let xScale = d3.scaleLinear()
         .range([0, width])
         .domain([0, 30]);
-        // .domain([0, d3.max(data, function(d){ return d.value; })]);
+
+  let colorScale = d3.scaleSequential(d3.interpolateBlues)
+          .domain([0,0.16]);
 
   //data
   let data = [];
   //vertical
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 500; i++) {
     let tmp = {
       x: randomBetween(10,15),
       y: randomBetween(0, 20)
     }
     data.push(tmp)
   }
-  //horizontal
-  for (let i = 0; i < 200; i++) {
+  //splitting horizontal into 2 parts to avoid center blob
+  //horizontal1
+  for (let i = 0; i < 300; i++) {
     let tmp = {
-      x: randomBetween(0,30),
+      x: randomBetween(0,10),
+      y: randomBetween(8, 13)
+    }
+    data.push(tmp)
+  }
+  //horizontal2
+  for (let i = 0; i < 500; i++) {
+    let tmp = {
+      x: randomBetween(15,30),
       y: randomBetween(8, 13)
     }
     data.push(tmp)
   }
 
-  calWin.selectAll("circle")
-    .data(data)
-    .enter()
-    .append("circle")
-    .attr("cx", d => xScale(d.x))
-    .attr("cy", d => yScale(d.y))
-    .attr("r",3)
-  // calWin.selectAll("path")
-  //   .data(d3.contours()
-  //       .size([width, height])
-  //       // .size([volcano.width, volcano.height])
-  //       .thresholds(d3.range(90, 195, 5))
-  //     (data.values))
-  //   .enter().append("path")
-  //     // .attr("d", d3.geoPath(d3.geoIdentity().scale(width / volcano.width)))
-  //     .attr("d", d3.geoPath(d3.geoIdentity().scale(1)))
-  //     .attr("fill", "lightBlue")
-  //     .attr("stroke","black");
-  //     // .attr("fill", function(d) { return color(d.value); });
 
+
+    calWin.selectAll("path")
+      .data(d3.contourDensity()
+              .x(function(d){ return xScale(d.x); })
+              .y(function(d) { return yScale(d.y); })
+              .size([width, height])
+              .bandwidth(10)
+              (data))
+      .enter()
+      .append("path")
+      .attr("stroke", "none")
+      .attr("fill", function(d){return colorScale(d.value);})
+      .attr("d", d3.geoPath());
 }//6th
 
 //////////////////////////
