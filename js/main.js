@@ -397,29 +397,63 @@ function addContent6(){
     .attr("class", "calWindowOpen")
 
   //change title
-  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("1: circle / ympyrä")
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("6: Itsenäisyyspäivä")
 
   //get container
   let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
-  let width = +calWin.attr("width")
-  let height = +calWin.attr("height")
-  // let padding = 10;
+  let padding = 10;
+  let width = +calWin.attr("width")-padding;
+  let height = +calWin.attr("height")-padding;
+
+  //scales
+  let yScale = d3.scaleLinear()
+        .range([height, 0])
+        .domain([0, 20]);
+
+
+  let xScale = d3.scaleLinear()
+        .range([0, width])
+        .domain([0, 30]);
+        // .domain([0, d3.max(data, function(d){ return d.value; })]);
 
   //data
-  let data = {"values": [103,104,104,105,105,106,106,106,107,107,106,106,105,105,104]}
+  let data = [];
+  //vertical
+  for (let i = 0; i < 100; i++) {
+    let tmp = {
+      x: randomBetween(10,15),
+      y: randomBetween(0, 20)
+    }
+    data.push(tmp)
+  }
+  //horizontal
+  for (let i = 0; i < 200; i++) {
+    let tmp = {
+      x: randomBetween(0,30),
+      y: randomBetween(8, 13)
+    }
+    data.push(tmp)
+  }
 
-  calWin.selectAll("path")
-    .data(d3.contours()
-        .size([width, height])
-        // .size([volcano.width, volcano.height])
-        .thresholds(d3.range(90, 195, 5))
-      (data.values))
-    .enter().append("path")
-      // .attr("d", d3.geoPath(d3.geoIdentity().scale(width / volcano.width)))
-      .attr("d", d3.geoPath(d3.geoIdentity().scale(1)))
-      .attr("fill", "lightBlue")
-      .attr("stroke","black");
-      // .attr("fill", function(d) { return color(d.value); });
+  calWin.selectAll("circle")
+    .data(data)
+    .enter()
+    .append("circle")
+    .attr("cx", d => xScale(d.x))
+    .attr("cy", d => yScale(d.y))
+    .attr("r",3)
+  // calWin.selectAll("path")
+  //   .data(d3.contours()
+  //       .size([width, height])
+  //       // .size([volcano.width, volcano.height])
+  //       .thresholds(d3.range(90, 195, 5))
+  //     (data.values))
+  //   .enter().append("path")
+  //     // .attr("d", d3.geoPath(d3.geoIdentity().scale(width / volcano.width)))
+  //     .attr("d", d3.geoPath(d3.geoIdentity().scale(1)))
+  //     .attr("fill", "lightBlue")
+  //     .attr("stroke","black");
+  //     // .attr("fill", function(d) { return color(d.value); });
 
 }//6th
 
@@ -455,3 +489,4 @@ addContent2();
 addContent3();
 addContent4();
 addContent5();
+addContent6();
