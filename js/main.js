@@ -446,8 +446,6 @@ function addContent6(){
     data.push(tmp)
   }
 
-
-
     calWin.selectAll("path")
       .data(d3.contourDensity()
               .x(function(d){ return xScale(d.x); })
@@ -457,8 +455,9 @@ function addContent6(){
               (data))
       .enter()
       .append("path")
-      .attr("stroke", "none")
       .attr("fill", function(d){return colorScale(d.value);})
+      .attr("stroke", "white")
+      .attr("stroke-width", 0.3)
       .attr("d", d3.geoPath());
 }//6th
 
