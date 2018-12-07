@@ -462,6 +462,78 @@ function addContent6(){
 }//6th
 
 //////////////////////////
+// 7th: voronoi
+// help: https://bl.ocks.org/aaizemberg/8063f8c2d1adb7c7ee68
+//////////////////////////
+function addContent7(){
+  let num = 6;
+  //change class to calWindowOpen
+  d3.select(calWindows[num].node())
+    .attr("class", "calWindowOpen")
+
+  //change title
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("7: Voronoi")
+
+  //Container
+  let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
+  let width = +calWin.attr("width")
+  let height = +calWin.attr("height")
+
+  let data = [];
+  let padding = 10;
+  for (let i = 0; i < 7; i++) {
+    //not using scales but mapping to the area
+    data.push([randomBetween(padding, width-padding),randomBetween(padding, height-padding)])
+  }
+
+  //colorScale
+  // let colorScale = d3.scaleOrdinal(d3schemeCategory20c)
+  let colorScale = d3.scaleSequential()
+          .domain([0,height])
+          // .domain([0,7])
+          .interpolator(d3.interpolatePlasma)
+
+  //Could not have thought of this myself.
+  //TODO learn svg better
+  function polygon(d) {
+    return "M" + d.join("L") + "Z";
+  }
+
+  //voronoi
+  let diagram = d3.voronoi().extent([[0,0], [width, height]])
+
+  calWin.append("g").selectAll("path")
+    .data(diagram.polygons(data))
+    .enter()
+    .append("path")
+    .attr("stroke","white")
+    .attr("stroke-width",3)
+    //coloring according to the x-value
+    .attr("fill",function(d){return colorScale(d.data[0]);})
+    .attr("d", polygon)
+
+  calWin.append("g").selectAll("line")
+    .data(diagram.links(data))
+    .enter()
+    .append("line")
+    .attr("x1", function(d) { return d.source[0]; })
+    .attr("y1", function(d) { return d.source[1]; })
+    .attr("x2", function(d) { return d.target[0]; })
+    .attr("y2", function(d) { return d.target[1]; })
+    .attr("stroke","white")
+    .attr("stroke-width",0.5)
+
+  calWin.append("g").selectAll("circle")
+    .data(data)
+    .enter()
+      .append("circle")
+      .attr("cx", function(d) {return d[0]})
+      .attr("cy", function(d) {return d[1]})
+      .attr("r", 1)
+      .attr("fill", "white")
+}//7th
+
+//////////////////////////
 //
 //////////////////////////
 function addContent(){
@@ -494,3 +566,4 @@ addContent3();
 addContent4();
 addContent5();
 addContent6();
+addContent7();
