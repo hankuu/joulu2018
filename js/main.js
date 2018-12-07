@@ -422,11 +422,10 @@ function addContent6(){
   let data = [];
   //vertical
   for (let i = 0; i < 500; i++) {
-    let tmp = {
+    data.push({
       x: randomBetween(10,15),
       y: randomBetween(0, 20)
-    }
-    data.push(tmp)
+    })
   }
   //splitting horizontal into 2 parts to avoid center blob
   //horizontal1
