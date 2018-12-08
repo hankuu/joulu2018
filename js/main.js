@@ -533,6 +533,69 @@ function addContent7(){
 }//7th
 
 //////////////////////////
+// 8th: Contours again
+//////////////////////////
+function addContent8(){
+  let num = 7;
+
+  //change class to calWindowOpen
+  d3.select(calWindows[num].node())
+    .attr("class", "calWindowOpen")
+
+  //change title
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("8: circles / ympyrät")
+
+  let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
+  let width = +calWin.attr("width")
+  let height = +calWin.attr("height")
+
+  let data = [];
+  let maxPoints = 500;
+  let outR = height/4-1;
+
+  //scales
+  let colorScale = d3.interpolateRgb("yellow", "orange");
+
+  //add background
+  calWin.append("rect")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("fill", "darkBlue")
+
+  //upper circle
+  for (var i = 0; i < maxPoints; i++) {
+    let t = 2*Math.PI*Math.random();
+    let r = 0;
+    while(r < outR/2){
+      r = outR * Math.sqrt(Math.random())
+    }
+    data.push([r*Math.cos(t)+width/2,r*Math.sin(t)+height/4,colorScale((outR-r)/(outR/2)),(outR-r)/(outR/2)])
+  }
+  //lower circle
+  for (var i = 0; i < maxPoints; i++) {
+    let t = 2*Math.PI*Math.random();
+    let r = 0;
+    while(r < outR/2){
+      r = outR * Math.sqrt(Math.random())
+    }
+    data.push([r*Math.cos(t)+width/2,r*Math.sin(t)+3*height/4, colorScale((outR-r)/(outR/2)), 1-(outR-r)/(outR/2)])
+  }
+
+  //draw
+  calWin.append("g")
+    .selectAll("circle")
+    .data(data)
+    .enter()
+    .append("circle")
+    .attr("cx", d => d[0])
+    .attr("cy", d => d[1])
+    // .attr("r", 1)
+    .attr("r", d => d[3]*3)
+    .attr("fill", d => d[2])
+}//8th
+
+
+//////////////////////////
 //
 //////////////////////////
 function addContent(){
@@ -566,3 +629,4 @@ addContent4();
 addContent5();
 addContent6();
 addContent7();
+addContent8();
