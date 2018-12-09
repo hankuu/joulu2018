@@ -594,7 +594,7 @@ function addContent8(){
 }//8th
 
 //////////////////////////
-// 9: ball number nine
+// 9: nine pulsing circles
 //////////////////////////
 function addContent9(){
   let num = 8;
@@ -641,7 +641,7 @@ function addContent9(){
             .duration(function(d,i){
               return (i%3)*500 + 2000;
              })
-  					.attr("r", targetR)
+  					.attr("r", targetR*Math.random())
   					.on("end", repeat);
   			})();
   }
@@ -665,7 +665,7 @@ function addContent9(){
             return (i%3)*500 + 2000;
          })
         .attr('stroke-width', 2)
-        .attr("r", targetR)
+        .attr("r", targetR*Math.random())
         .on("end", pulse);
 
 
