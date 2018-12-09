@@ -603,7 +603,7 @@ function addContent9(){
     .attr("class", "calWindowOpen")
 
   //change title
-  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("9: Pulse")
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("9: pulse / pulssi")
 
   //container
   let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
@@ -628,19 +628,21 @@ function addContent9(){
   //color
   let colorScale = d3.quantize(d3.interpolateHcl("yellow", "#4d4193"), 9);
 
+  //calculate duration
+  function getDuration(d,i){
+    return (i%2)*500 + 2000;
+  }
+
+
   //handle pulse
   function pulse() {
   			var circle = calWin.selectAll("circle");
   			(function repeat() {
   				circle = circle.transition()
-          .duration(function(d,i){
-            return (i%3)*500 + 2000;
-           })
+          .duration(getDuration)
   					.attr("r", 10)
   					.transition()
-            .duration(function(d,i){
-              return (i%3)*500 + 2000;
-             })
+            .duration(getDuration)
   					.attr("r", targetR*Math.random())
   					.on("end", repeat);
   			})();
@@ -661,9 +663,7 @@ function addContent9(){
         return colorScale[8-i];
        })
       .transition()
-        .duration(function(d,i){
-            return (i%3)*500 + 2000;
-         })
+      .duration(getDuration)
         .attr('stroke-width', 2)
         .attr("r", targetR*Math.random())
         .on("end", pulse);
