@@ -589,10 +589,88 @@ function addContent8(){
     .append("circle")
     .attr("cx", d => d[0])
     .attr("cy", d => d[1])
-    // .attr("r", 1)
     .attr("r", d => d[3]*3)
     .attr("fill", d => d[2])
 }//8th
+
+//////////////////////////
+// 9: ball number nine
+//////////////////////////
+function addContent9(){
+  let num = 8;
+  //change class to calWindowOpen
+  d3.select(calWindows[num].node())
+    .attr("class", "calWindowOpen")
+
+  //change title
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("9: Pulse")
+
+  //container
+  let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
+  let padding = 5;
+  let width = +calWin.attr("width")-padding
+  let height = +calWin.attr("height")-padding
+
+  let side = width < height ? width : height;
+
+  let xVar = width/3;
+  let yVar = side/3;
+
+  let targetR = side/3;
+
+  let data = [];
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      data.push([xVar*(i+0.5),yVar*(j+0.5)])
+    }
+  }
+
+  //color
+  let colorScale = d3.quantize(d3.interpolateHcl("yellow", "#4d4193"), 9);
+
+  //handle pulse
+  function pulse() {
+  			var circle = calWin.selectAll("circle");
+  			(function repeat() {
+  				circle = circle.transition()
+          .duration(function(d,i){
+            return (i%3)*500 + 2000;
+           })
+  					.attr("r", 10)
+  					.transition()
+            .duration(function(d,i){
+              return (i%3)*500 + 2000;
+             })
+  					.attr("r", targetR)
+  					.on("end", repeat);
+  			})();
+  }
+
+  //draw circles
+      calWin.selectAll("circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("cx", d => d[0])
+      .attr("cy", d => d[1])
+      .attr("r",10)
+      .attr("fill", function(d,i){
+        return colorScale[i];
+       })
+      .attr("stroke", function(d,i){
+        return colorScale[8-i];
+       })
+      .transition()
+        .duration(function(d,i){
+            return (i%3)*500 + 2000;
+         })
+        .attr('stroke-width', 2)
+        .attr("r", targetR)
+        .on("end", pulse);
+
+
+}//9th
+
 
 
 //////////////////////////
@@ -630,3 +708,4 @@ addContent5();
 addContent6();
 addContent7();
 addContent8();
+addContent9();
