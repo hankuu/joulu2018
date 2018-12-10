@@ -672,6 +672,107 @@ function addContent9(){
 }//9th
 
 
+//////////////////////////
+// 10th collatz conjecture
+//////////////////////////
+function addContent10(){
+  let num = 9;
+  //change class to calWindowOpen
+  d3.select(calWindows[num].node())
+    .attr("class", "calWindowOpen")
+
+  //change title
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("10: Collatz conjecture")
+
+  //container
+  let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
+
+  let padding = 10;
+  let width = +calWin.attr("width")-2*padding;
+  let height = +calWin.attr("height")-2*padding;
+
+  let universalY = 2*height/3;
+
+  let data = {
+    nodes: [
+      {id: 1, used: 1},
+       {id: 2, used: 1},
+       {id: 3, used: 0},
+       {id: 4, used: 1},
+       {id: 5, used: 1},
+       {id: 6, used: 0},
+       {id: 7, used: 0},
+       {id: 8, used: 1},
+       {id: 9, used: 0},
+       {id: 10, used: 1},
+       {id: 11, used: 0},
+       {id: 12, used: 0},
+       {id: 13, used: 0},
+       {id: 14, used: 0},
+       {id: 15, used: 0},
+       {id: 16, used: 1}
+     ],
+     links: [
+        {"source": 5,
+         "target": 10},
+        {"source": 5,
+         "target": 16},
+        {"source": 8,
+         "target": 16},
+        {"source": 4,
+         "target": 8},
+        {"source": 2,
+         "target": 4},
+        {"source": 1,
+         "target": 2}
+     ]
+  };
+
+  //scales
+  let xScale = d3.scaleLinear()
+          .range([padding, width])
+          .domain([0,17])
+
+
+  //if scaled?
+  let rScale = d3.scaleSqrt()
+          .range([3, 7])
+
+
+  //Draw nodes
+  calWin.selectAll("circle")
+  .data(data.nodes)
+  .enter()
+  .append("circle")
+  // .attr("cx", function(d){return xScale(d.id)})
+  .attr("cx", (d) => xScale(d.id))
+  .attr("cy", universalY)
+  .attr("r", function(d){
+    return d.used === 1 ? 5 : 2;
+  })
+  .attr("fill", function(d){
+    return d.used === 1 ? "tomato" : "gray";
+  })
+  .attr("stroke", function(d){
+    return d.id === 10 ? "lime" : "transparent";
+  })
+  .attr("stroke-width", 2)
+
+
+  //draw links
+  calWin.selectAll("path")
+  .data(data.links)
+  .enter()
+  .append("path")
+  .attr("d", function(d){
+    //Building an arc
+    return "M " + xScale(d.source) + "," + universalY + " A " + ((xScale(d.source)-xScale(d.target))/2) + "," + ((xScale(d.source)-xScale(d.target))/2) + " 0 0, 1 " +xScale(d.target) + " " + universalY;
+  })
+  .attr("fill", "transparent")
+  .attr("stroke", "black")
+
+}//10th
+
 
 //////////////////////////
 //
@@ -709,3 +810,4 @@ addContent6();
 addContent7();
 addContent8();
 addContent9();
+addContent10();
