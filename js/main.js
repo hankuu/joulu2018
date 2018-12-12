@@ -486,10 +486,8 @@ function addContent7(){
   }
 
   //colorScale
-  // let colorScale = d3.scaleOrdinal(d3schemeCategory20c)
   let colorScale = d3.scaleSequential()
           .domain([0,height])
-          // .domain([0,7])
           .interpolator(d3.interpolatePlasma)
 
   //Could not have thought of this myself.
@@ -773,6 +771,72 @@ function addContent10(){
 
 }//10th
 
+//////////////////////////
+// 11th: Bubbles!
+// A recipe for Baked Berry Oatmeal http://www.foodhero.org/recipes/baked-berry-oatmeal
+//////////////////////////
+function addContent11(){
+  let num = 10;
+  //change class to calWindowOpen
+  d3.select(calWindows[num].node())
+    .attr("class", "calWindowOpen")
+
+  //change title
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("11: bubbles!")
+
+  //container
+  let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
+
+  let width = +calWin.attr("width")
+  let height = +calWin.attr("height")
+
+  //data
+  let data = {
+    "children" : [{"name": "rolled oats", "measure":"cup", "amount":2 },
+    {"name": "baking powder", "measure":"teaspoon", "amount":1 },
+    {"name": "cinnamon", "measure":"teaspoon", "amount":1 },
+    {"name": "salt", "measure":"teaspoon", "amount":0.25 },
+    {"name": "egg", "measure":"item", "amount":2 },
+    {"name": "brown sugar", "measure":"cup", "amount":0.5 },
+    {"name": "vanilla", "measure":"teaspoon", "amount":1.5 },
+    {"name": "milk", "measure":"cup", "amount":2 },
+    {"name": "melted butter", "measure":"teaspoon", "amount":4 },
+    {"name": "cane berries", "measure":"cup", "amount":2 },
+    {"name": "walnuts (chopped)", "measure":"cup", "amount":0.25 }]
+  }
+
+  let bubbles = d3.pack(data)
+                  .size([width, height])
+                  .padding(2);
+
+  let nodes = d3.hierarchy(data)
+              .sum(function(d){ return d.amount;})
+
+  //find out number of different measure types
+  let types = d3.set();
+  for (let i = 0; i < data.children.length; i++) {
+    types.add(data.children[i].measure)
+  }
+
+  //colors according to number of measure types
+  let colorScale = d3.scaleOrdinal(d3.schemeSpectral[types.values().length])
+
+  let node = calWin.selectAll("circle")
+      .data(bubbles(nodes).descendants())
+      .enter()
+      .filter(function(d){ return !d.children;})
+      .append("g")
+      .attr("transform", function(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+      })
+
+    node.append("circle")
+      .attr("r", (d) => d.r )
+      .attr("fill", function(d){
+        return colorScale(types.values().indexOf(d.data.measure))})
+
+}//11th
+
 
 //////////////////////////
 //
@@ -811,3 +875,4 @@ addContent7();
 addContent8();
 addContent9();
 addContent10();
+addContent11();
