@@ -837,6 +837,53 @@ function addContent11(){
 
 }//11th
 
+//////////////////////////
+// 12th: clock
+//////////////////////////
+function addContent12(){
+  let num = 11;
+  //change class to calWindowOpen
+  d3.select(calWindows[num].node())
+    .attr("class", "calWindowOpen")
+
+  //change title
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("12: dance / tanssi")
+
+  let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
+
+  let width = +calWin.attr("width");
+  let height = +calWin.attr("height");
+  let side = height < width ? height : width;
+  let padding = 20;
+  side -= 2*padding;
+
+  let outerR = side/2-20;
+  let data = d3.range(12);
+  let t = Math.PI/6;
+
+  calWin
+  .attr("width", side)
+  .attr("height", side)
+  .attr("transform",`translate(${ width/2 - side/2 },${ padding }), rotate(-90)`)
+  .selectAll("circle")
+  .data(data)
+  .enter()
+  .append("circle")
+  .attr("cx", function(d,i){return outerR*Math.cos(i*t)+side/2-5})
+  .attr("cy", function(d,i){ return outerR*Math.sin(i*t)+side/2})
+  .attr("r", function(d,i){return 7+(11-i)})
+  .attr("fill", "black")
+  .attr("stroke","tomato")
+  .transition()
+  .duration(2000)
+    .attr("cx", function(d,i){return outerR*Math.cos(i*Math.PI/2)+side/2-3})
+    .attr("cy", function(d,i){ return outerR*Math.sin(i*Math.PI/2)+side/2})
+    .attr("fill", "tomato")
+    .attr("stroke", "black")
+
+}//12th
+
+
 
 //////////////////////////
 //
@@ -876,3 +923,4 @@ addContent8();
 addContent9();
 addContent10();
 addContent11();
+addContent12();
