@@ -880,6 +880,36 @@ function addContent12(){
     .attr("cy", function(d,i){ return outerR*Math.sin(i*Math.PI/2)+side/2})
     .attr("fill", "tomato")
     .attr("stroke", "black")
+    .on("end",dance)
+
+    function dance() {
+    			var circle = calWin.selectAll("circle");
+    			(function repeat() {
+    				circle = circle.transition()
+            .duration(2000)
+              .attr("cx", function(d,i){
+                let angle = getAngle(i);
+                return outerR*Math.cos(angle)+side/2-3;
+              })
+              .attr("cy", function(d,i){
+                let angle = getAngle(i);
+                return outerR*Math.sin(angle)+side/2;
+              })
+              .attr("fill", "black")
+              .attr("stroke","tomato")
+    					.transition()
+              .duration(2000)
+              .attr("cx", function(d,i){return outerR*Math.cos(i*t)+side/2-3})
+              .attr("cy", function(d,i){ return outerR*Math.sin(i*t)+side/2})
+              .attr("fill", "tomato")
+              .attr("stroke", "black")
+    					.on("end", repeat);
+    			})();
+    }
+
+    function getAngle(i){
+      return i*Math.PI/randomBetween(2,10);
+    }
 
 }//12th
 
