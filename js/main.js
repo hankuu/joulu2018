@@ -879,13 +879,9 @@ function addContent12(){
   .duration(2000)
     .attr("cx", function(d,i){return outerR*Math.cos(getAngle(i))+side/2-3})
     .attr("cy", function(d,i){ return outerR*Math.sin(getAngle(i))+side/2})
-    // .attr("cx", function(d,i){return outerR*Math.cos(i*Math.PI/2)+side/2-3})
-    // .attr("cy", function(d,i){ return outerR*Math.sin(i*Math.PI/2)+side/2})
     .attr("fill", "tomato")
     .attr("stroke", "black")
-    .on("end",dance)
-
-    function dance() {
+    .on("end", function(d){
     			var circle = calWin.selectAll("circle");
     			(function repeat() {
     				circle = circle.transition()
@@ -908,7 +904,7 @@ function addContent12(){
               .attr("stroke", "black")
     					.on("end", repeat);
     			})();
-    }
+  })
 
     function getAngle(i){
       return i*Math.PI/randomBetween(2,10);
@@ -929,69 +925,77 @@ function addContent13(){
   //change title
   d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("13: Lucia")
 
+  //container
   let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
 
   let width = +calWin.attr("width")
   let height = +calWin.attr("height")
 
-  // calWin.selectAll("path")
-  // .data(data.links)
-  // .enter()
-  // .append("path")
-  // .attr("d", function(d){
-  //   //Building an arc
-  //   return "M " + xScale(d.source) + "," + universalY + " A " + ((xScale(d.source)-xScale(d.target))/2) + "," + ((xScale(d.source)-xScale(d.target))/2) + " 0 0, 1 " +xScale(d.target) + " " + universalY;
-  // })
-  // .attr("fill", "transparent")
-  // .attr("stroke", "black")
+  //add background
+  calWin.append("rect")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("fill", "darkBlue")
+
 
   //create helper data container
   let data = d3.range(13);
 
   //Following is based on precalculated placements
-  calWin.selectAll("rect")
+  //TODO: extract path drawing into a function
+  calWin.selectAll(".candle")
   .data(data)
   .enter()
   .append("rect")
-  .attr("x", function(d){ return 37+d*10; })
+  .attr("x", function(d){ return 36+d*10; })
   .attr("y", height/2)
   .attr("width", 8)
+  .attr("class", "candle")
   .attr("height", height/2)
-  .attr("fill", "black")
+  .attr("fill", "Ivory")
 
   calWin.selectAll(".bigFlame")
   .data(data)
   .enter()
   .append("path")
-  .attr("d", function(d){ return "M "+ (40) })
-
-  // calWin.append("path")
-  // // .attr("d", "M 25, "+ (width/2) +" q " + ((175-25)/2) + ", "+ ((175-25)/4) + " 150, 0 q -150, 0")
-  // .attr("d", "M 25, 100 q 75, 37.5 150, 0 q -75, -37.5 -150, 0")
-  // .attr("stroke", "orange")
-  // .attr("fill", "yellow");
-  //
-  // calWin.append("path")
-  // // .attr("d", "M 25, "+ (width/2) +" q " + ((175-25)/2) + ", "+ ((175-25)/4) + " 150, 0 q -150, 0")
-  // .attr("d", "M 25, 100 q 37.5, 18.75 75, 0 q -37.5, -18.75 -75, 0")
-  // .attr("stroke", "red")
-  // .attr("fill", "orange")
-
-
-  calWin.append("path")
-  // .attr("d", "M 25, "+ (width/2) +" q " + ((175-25)/2) + ", "+ ((175-25)/4) + " 150, 0 q -150, 0")
-  .attr("d", "M 25, 100 q 75, 37.5 150, 0 q -75, -37.5 -150, 0 M 25, 100 q 37.5, 18.75 75, 0 q -37.5, -18.75 -75, 0")
+  .attr("d", function(d){ return "M " + (40+d*10) + ", " + (height/2) + " q -5, -10 0, -20 q 5, 10 0, 20" })
+  .attr("class", ".bigFlame")
   .attr("stroke", "orange")
-  .attr("fill", "yellow");
+  .attr("fill", "yellow")
+
+  calWin.append("g")
+  .attr("id","smallFlames")
+  .selectAll(".smallFlame")
+  .data(data)
+  .enter()
+  .append("path")
+  .attr("d", function(d){ return "M " + (40+d*10) + ", " + (height/2) + " q -2.5, -5 0, -10 q 2.5, 5 0, 10" })
+  .attr("class", ".smallFlame")
+  .attr("fill", "orange")
+  .attr("stroke", "red")
+  .transition()
+    .duration(2000)
+    .attr("fill", "yellow")
+    .attr("stroke", "orange")
+    .on("end", flicker)
 
 
-  // calWin.append("path")
-  // // .attr("d", "M 25, "+ (width/2) +" q " + ((175-25)/2) + ", "+ ((175-25)/4) + " 150, 0 q -150, 0")
-  // .attr("d", "M 25, 100 q 75, 37.5 150, 0 q -75, -37.5 -150, 0")
-  // .attr("stroke", "orange")
-  // .attr("fill", "yellow");
+      function flicker() {
+    			var flamegroup = calWin.select("#smallFlames");
+          var sFlames = flamegroup.selectAll("path");
 
-
+    			(function repeat() {
+            sFlames = sFlames.transition()
+            .duration(randomBetween(500,2000))
+            .attr("fill", "orange")
+            .attr("stroke", "red")
+            .transition()
+              .duration(randomBetween(500,2000))
+              .attr("fill", "yellow")
+              .attr("stroke", "orange")
+              .on("end", repeat);
+          })();
+      }
 
 }//13th
 
@@ -1036,4 +1040,4 @@ addContent9();
 addContent10();
 addContent11();
 addContent12();
-// addContent13();
+addContent13();
