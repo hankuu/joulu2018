@@ -917,6 +917,85 @@ function addContent12(){
 }//12th
 
 
+//////////////////////////
+// 13th: Lucia
+//////////////////////////
+function addContent13(){
+  let num = 12;
+  //change class to calWindowOpen
+  d3.select(calWindows[num].node())
+    .attr("class", "calWindowOpen")
+
+  //change title
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("13: Lucia")
+
+  let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
+
+  let width = +calWin.attr("width")
+  let height = +calWin.attr("height")
+
+  // calWin.selectAll("path")
+  // .data(data.links)
+  // .enter()
+  // .append("path")
+  // .attr("d", function(d){
+  //   //Building an arc
+  //   return "M " + xScale(d.source) + "," + universalY + " A " + ((xScale(d.source)-xScale(d.target))/2) + "," + ((xScale(d.source)-xScale(d.target))/2) + " 0 0, 1 " +xScale(d.target) + " " + universalY;
+  // })
+  // .attr("fill", "transparent")
+  // .attr("stroke", "black")
+
+  //create helper data container
+  let data = d3.range(13);
+
+  //Following is based on precalculated placements
+  calWin.selectAll("rect")
+  .data(data)
+  .enter()
+  .append("rect")
+  .attr("x", function(d){ return 37+d*10; })
+  .attr("y", height/2)
+  .attr("width", 8)
+  .attr("height", height/2)
+  .attr("fill", "black")
+
+  calWin.selectAll(".bigFlame")
+  .data(data)
+  .enter()
+  .append("path")
+  .attr("d", function(d){ return "M "+ (40) })
+
+  // calWin.append("path")
+  // // .attr("d", "M 25, "+ (width/2) +" q " + ((175-25)/2) + ", "+ ((175-25)/4) + " 150, 0 q -150, 0")
+  // .attr("d", "M 25, 100 q 75, 37.5 150, 0 q -75, -37.5 -150, 0")
+  // .attr("stroke", "orange")
+  // .attr("fill", "yellow");
+  //
+  // calWin.append("path")
+  // // .attr("d", "M 25, "+ (width/2) +" q " + ((175-25)/2) + ", "+ ((175-25)/4) + " 150, 0 q -150, 0")
+  // .attr("d", "M 25, 100 q 37.5, 18.75 75, 0 q -37.5, -18.75 -75, 0")
+  // .attr("stroke", "red")
+  // .attr("fill", "orange")
+
+
+  calWin.append("path")
+  // .attr("d", "M 25, "+ (width/2) +" q " + ((175-25)/2) + ", "+ ((175-25)/4) + " 150, 0 q -150, 0")
+  .attr("d", "M 25, 100 q 75, 37.5 150, 0 q -75, -37.5 -150, 0 M 25, 100 q 37.5, 18.75 75, 0 q -37.5, -18.75 -75, 0")
+  .attr("stroke", "orange")
+  .attr("fill", "yellow");
+
+
+  // calWin.append("path")
+  // // .attr("d", "M 25, "+ (width/2) +" q " + ((175-25)/2) + ", "+ ((175-25)/4) + " 150, 0 q -150, 0")
+  // .attr("d", "M 25, 100 q 75, 37.5 150, 0 q -75, -37.5 -150, 0")
+  // .attr("stroke", "orange")
+  // .attr("fill", "yellow");
+
+
+
+}//13th
+
+
 
 //////////////////////////
 //
@@ -957,3 +1036,4 @@ addContent9();
 addContent10();
 addContent11();
 addContent12();
+// addContent13();
