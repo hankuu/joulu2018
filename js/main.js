@@ -819,7 +819,8 @@ function addContent11(){
   }
 
   //colors according to number of measure types
-  let colorScale = d3.scaleOrdinal(d3.schemeSpectral[types.values().length])
+  // let colorScale = d3.scaleOrdinal(d3.schemeSpectral[types.values().length])
+  let colorScale = d3.scaleOrdinal(d3.schemeSpectral[types.values().length*3])
 
   let node = calWin.selectAll("circle")
       .data(bubbles(nodes).descendants())
@@ -833,7 +834,7 @@ function addContent11(){
     node.append("circle")
       .attr("r", (d) => d.r )
       .attr("fill", function(d){
-        return colorScale(types.values().indexOf(d.data.measure))})
+        return colorScale(types.values().indexOf(d.data.measure)+3)})
 
 }//11th
 
