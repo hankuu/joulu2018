@@ -1000,6 +1000,76 @@ function addContent13(){
 }//13th
 
 
+//////////////////////////
+// 14th: triangles
+//////////////////////////
+function addContent14(){
+  let num = 13;
+  //change class to calWindowOpen
+  d3.select(calWindows[num].node())
+    .attr("class", "calWindowOpen")
+
+  //change title
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("14: triangles / kolmiot")
+
+  let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
+
+  //container
+  let width = +calWin.attr("width")
+  let height = +calWin.attr("height")
+
+  //triangle measures
+  let tSide = width/7;
+  let tHeight = Math.sqrt(3)*0.5*tSide;
+
+  //coloring
+  let colorScale = d3.scaleSequential()
+          .domain([0,height])
+          .interpolator(d3.interpolatePlasma)
+
+  calWin.append("rect")
+  .attr("x",0)
+  .attr("y",0)
+  .attr("width", width)
+  .attr("height",height/2)
+  // .attr("fill", colorScale(height/3))
+  .attr("fill", colorScale(randomBetween(0,height/2)))
+
+  calWin.append("rect")
+  .attr("x",0)
+  .attr("y",height/2)
+  .attr("width", width)
+  .attr("height",height/2)
+  // .attr("fill", colorScale(2*height/3))
+  .attr("fill", colorScale(randomBetween(height/2,height)))
+
+
+  function drawTriangle(x, y, pointUp){
+    let path = "";
+    if(pointUp===true){
+      path = "M "+(x)+", "+(y-tHeight/2)+" l "+(tSide/2)+", "+(tHeight)+" l "+(-tSide)+", 0 z"
+    }else{
+      path = "M "+(x)+", "+(y+tHeight/2)+" l "+(-tSide/2)+", "+(-tHeight)+" l "+(tSide)+", 0 z"
+    }
+      return path;
+  }
+
+  calWin.selectAll("path")
+  .data(d3.range(14))
+  .enter()
+  .append("path")
+  .attr("d", function(d){
+    return drawTriangle(tSide/2+(d>6?d-7:d)*(tSide),(d>6?height/2+tHeight/2:height/2-tHeight/2),(d%2===0?false:true))})
+  .attr("fill", function(d){ return colorScale((13-d)*height/14) })
+  .transition()
+    .duration(2000)
+    .attr("fill", function(d){ return colorScale((d)*height/14) })
+    .transition()
+      .duration(2000)
+      .attr("fill", function(d){ return colorScale((13-d)*height/14) })
+}//14th
+
+
 
 //////////////////////////
 //
@@ -1041,3 +1111,4 @@ addContent10();
 addContent11();
 addContent12();
 addContent13();
+addContent14();
