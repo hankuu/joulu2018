@@ -1044,6 +1044,7 @@ function addContent14(){
   .attr("fill", colorScale(randomBetween(height/2,height)))
 
 
+  //draw triangle from center point
   function drawTriangle(x, y, pointUp){
     let path = "";
     if(pointUp===true){
@@ -1054,20 +1055,118 @@ function addContent14(){
       return path;
   }
 
+  //Draw triangles
   calWin.selectAll("path")
   .data(d3.range(14))
   .enter()
   .append("path")
   .attr("d", function(d){
+    //x: move triqngle center point from left to right. restart for the 2nd row
+    //y: 2nd row starts after 7 triangles
+    //pointup: draw every other triangle point up
     return drawTriangle(tSide/2+(d>6?d-7:d)*(tSide),(d>6?height/2+tHeight/2:height/2-tHeight/2),(d%2===0?false:true))})
   .attr("fill", function(d){ return colorScale((13-d)*height/14) })
   .transition()
     .duration(2000)
-    .attr("fill", function(d){ return colorScale((d)*height/14) })
+    .attr("fill", function(d){return colorScale((d)*height/14) })
     .transition()
       .duration(2000)
       .attr("fill", function(d){ return colorScale((13-d)*height/14) })
 }//14th
+
+
+//////////////////////////
+// 15th: 3 pentagons
+//////////////////////////
+function addContent15(){
+  let num = 14;
+  //change class to calWindowOpen
+  d3.select(calWindows[num].node())
+    .attr("class", "calWindowOpen")
+
+  //change title
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("15: pentagons")
+
+  let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
+
+  //container
+  let width = +calWin.attr("width")
+  let height = +calWin.attr("height")
+
+  //bakground
+  calWin.append("rect")
+  .attr("x",0)
+  .attr("y",0)
+  .attr("width",width)
+  .attr("height", height)
+  .attr("fill", "#6f00a8")
+
+
+  //pentagon measures
+  let pSide = 40;
+  let pHeight = pSide*Math.sqrt(5+2*Math.sqrt(5))/2;
+
+  //draw pentagon from center point
+  function drawPentagon(x,y,turn,scale){
+    //angle to turn on circumscribed circle
+    let a = 72 * Math.PI/180;
+
+    let points = []
+    for (let i = 0; i < 5; i++) {
+        points[i] = [x + scale*pHeight/2*Math.cos(i*a+turn), y + scale*pHeight/2*Math.sin(i*a+turn)]
+    }
+
+    return "M" + points.join("L") + "z";
+  }
+
+//rotate shape
+function rotateShape(id,x,y,angle){
+
+  let shape = calWin.select(id);
+
+  (function repeat() {
+    shape.transition()
+    .duration(2000)
+    .attrTween('transform',function(d){
+      return d3.interpolateString("rotate(0,"+x+","+y+")","rotate("+angle+","+x+","+y+")");
+    })
+    .transition()
+      .duration(2000)
+      .attrTween('transform',function(d){
+        return d3.interpolateString("rotate("+(angle)+","+x+","+y+")","rotate(0,"+x+","+y+")");
+      })
+    .on("end",repeat);
+  })();
+}
+
+  //draw pentagons
+  calWin.append("path")
+  .attr("d", drawPentagon(width/2, height/3, Math.PI/5, 1.3))
+  .attr("id","shape1")
+  .attr("fill", "transparent")
+  .attr("stroke", "#cc4778")
+  .attr("stroke-width",20)
+
+  calWin.append("path")
+  .attr("d", drawPentagon(width/4, 2*height/3, 0, 1))
+  .attr("id","shape2")
+  .attr("fill", "#fba238")
+  .attr("opacity", 0.8)
+  .attr("stroke", "transparent");
+
+  calWin.append("path")
+  .attr("d", drawPentagon(2*width/3, 3*height/4, 0, 0.8))
+  .attr("id","shape3")
+  .attr("fill", "#fada24")
+  .attr("opacity", 0.7)
+  .attr("stroke", "transparent")
+
+  //rotate
+  rotateShape("#shape1",width/2,height/3,230)
+  rotateShape("#shape2",width/2,height/3,-72)
+  rotateShape("#shape3",width/2,height/2,-300)
+
+}//15th
 
 
 
@@ -1112,3 +1211,4 @@ addContent11();
 addContent12();
 addContent13();
 addContent14();
+addContent15();
