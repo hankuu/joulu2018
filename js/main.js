@@ -1168,6 +1168,129 @@ function rotateShape(id,x,y,angle){
 
 }//15th
 
+//////////////////////////
+// 16th: 4x4
+//////////////////////////
+function addContent16(){
+  let num = 15;
+  //change class to calWindowOpen
+  d3.select(calWindows[num].node())
+    .attr("class", "calWindowOpen")
+
+  //change title
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("16: 4x4")
+
+  let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
+
+  let padding = 10;
+  let width = +calWin.attr("width")-2*padding
+  let height = +calWin.attr("height")-2*padding
+  let sHeight = height/4;
+
+  //draw star from center point
+  function drawStar(x,y){
+    //angle to turn on circumscribed circle
+    let a = Math.PI/2;
+
+    let points = []
+    for (let i = 0; i < 5; i++) {
+      points[i] = [x + sHeight*Math.cos(i*a), y + sHeight*Math.sin(i*a)]
+    }
+    return "M" + points.join("Q"+x+","+y+" ")+ "z";
+  }
+
+  //rotate all stars
+  function rotateStars(id){
+    let star = calWin.select(id);
+    let angle = randomBetween(60,2*360);
+    let x = +id.split("#star")[1]%2===0?width/2-height/4:width/2+height/4;
+    let y = +id.split("#star")[1]<2?height/4:3*height/4;
+
+    (function repeat() {
+      star.transition()
+      .duration(randomBetween(2000,3000))
+      .attrTween('transform',function(d){
+        return d3.interpolateString("rotate(0,"+x+","+y+")","rotate("+angle+","+x+","+y+")");
+      })
+      .transition()
+      .duration(randomBetween(1000,3000))
+        .attrTween('transform',function(d){
+          return d3.interpolateString("rotate("+(angle)+","+x+","+y+")","rotate(0,"+x+","+y+")");
+        })
+      .on("end",repeat);
+    })();
+  }
+
+  calWin.attr("width",width)
+  .attr("height",height)
+  .attr("transform",`translate(${padding},${padding})`)
+
+
+  calWin.append("circle")
+  .attr("cx", width/2-height/4)
+  .attr("cy", height/4)
+  .attr("r", sHeight)
+  .attr("fill", "red")
+
+  calWin.append("circle")
+  .attr("cx", width/2-height/4)
+  .attr("cy", height/4)
+  .attr("r", sHeight-3)
+  .attr("fill", "white")
+
+
+  calWin.append("circle")
+  .attr("cx", width/2+height/4)
+  .attr("cy", height/4)
+  .attr("r", sHeight)
+  .attr("fill", "black")
+
+  calWin.append("circle")
+  .attr("cx", width/2+height/4)
+  .attr("cy", height/4)
+  .attr("r", sHeight-3)
+  .attr("fill", "white")
+
+  calWin.append("circle")
+  .attr("cx", width/2-height/4)
+  .attr("cy", 3*height/4)
+  .attr("r", sHeight)
+  .attr("fill", "black")
+
+  calWin.append("circle")
+  .attr("cx", width/2-height/4)
+  .attr("cy", 3*height/4)
+  .attr("r", sHeight-3)
+  .attr("fill", "white")
+
+  calWin.append("circle")
+  .attr("cx", width/2+height/4)
+  .attr("cy", 3*height/4)
+  .attr("r", sHeight)
+  .attr("fill", "red")
+
+  calWin.append("circle")
+  .attr("cx", width/2+height/4)
+  .attr("cy", 3*height/4)
+  .attr("r", sHeight-3)
+  .attr("fill", "white")
+
+  //draw stars
+  calWin.selectAll("path")
+  .data(d3.range(4))
+  .enter()
+  .append("path")
+  .attr("d",(d)=>drawStar(d%2===0?width/2-height/4:width/2+height/4, d<2?height/4:3*height/4))
+  .attr("id",function(d){return "star"+d})
+  .attr("fill",function(d){return d%3===0?"red":"black"})
+
+  rotateStars("#star0");
+  rotateStars("#star1");
+  rotateStars("#star2");
+  rotateStars("#star3");
+
+}//16th
+
 
 
 //////////////////////////
@@ -1212,3 +1335,4 @@ addContent12();
 addContent13();
 addContent14();
 addContent15();
+addContent16();
