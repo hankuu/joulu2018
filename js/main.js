@@ -1312,7 +1312,7 @@ function addContent16(){
 
 
 //////////////////////////
-// 17th:
+// 17th: a pointy thing
 //////////////////////////
 function addContent17(){
   let num = 16;
@@ -1321,23 +1321,37 @@ function addContent17(){
     .attr("class", "calWindowOpen")
 
   //change title
-  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("1: circle / ympyrä")
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("17: pointy / piikikäs")
 
   let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
 
+  //container
   let width = +calWin.attr("width")
   let height = +calWin.attr("height")
 
+  let cx = width/2
+  let cy = height/2
 
-  calWin.append("path")
-  .attr("d", pathForPolygon(width/2,height/2,80,17,false))
-  .attr("fill", "black")
+  let colorScale = d3.scaleSequential()
+                    .domain([width/2,0])
+                    .interpolator(d3.interpolateViridis)
+
+  let opacityScale = d3.scaleLinear()
+                      .domain([0,width/2])
+                      .range([1,0.3])
+
+calWin.append("path")
+.attr("d", pathForPolygon(cx,cy,width,17,false))
+.attr("fill", colorScale(width/17))
+.attr("opacity",opacityScale(width/3))
 
 
-  calWin.append("path")
-  .attr("d", pathForPolygon(width/2,height/2,110,17,true))
-  .attr("fill", "white")
-
+  for(let i = 17; i > 0; i-- ){
+    calWin.append("path")
+    .attr("d", pathForPolygon(cx,cy,width/17*i,17,true))
+    .attr("fill", colorScale(width/17*i))
+    .attr("opacity",opacityScale(width/17*i))
+  }
 
 }//17th
 
