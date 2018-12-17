@@ -35,6 +35,25 @@ function randomBetween(low, high){
   return Math.floor(Math.random()*(high-low+1)+low);
 }
 
+function pathForPolygon(cx,cy,height,numOfPoints,isCurvedIn){
+  //path to return
+  let path = "";
+  //angle to turn on circumscribed circle
+  let a = 2*Math.PI/numOfPoints;
+
+  let points = []
+  for (let i = 0; i <= numOfPoints; i++) {
+    points[i] = [cx + height*Math.cos(i*a), cy + height*Math.sin(i*a)]
+  }
+
+  if(isCurvedIn===true){
+    path = "M" + points.join("Q"+cx+","+cy+" ")+ "z";
+  }else{
+    path = "M" + points.join("L")+ "z";
+  }
+  return path;
+}
+
 
 
 //////////////////////////
@@ -1292,6 +1311,37 @@ function addContent16(){
 }//16th
 
 
+//////////////////////////
+// 17th:
+//////////////////////////
+function addContent17(){
+  let num = 16;
+  //change class to calWindowOpen
+  d3.select(calWindows[num].node())
+    .attr("class", "calWindowOpen")
+
+  //change title
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("1: circle / ympyrä")
+
+  let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
+
+  let width = +calWin.attr("width")
+  let height = +calWin.attr("height")
+
+
+  calWin.append("path")
+  .attr("d", pathForPolygon(width/2,height/2,80,17,false))
+  .attr("fill", "black")
+
+
+  calWin.append("path")
+  .attr("d", pathForPolygon(width/2,height/2,110,17,true))
+  .attr("fill", "white")
+
+
+}//17th
+
+
 
 //////////////////////////
 //
@@ -1336,3 +1386,4 @@ addContent13();
 addContent14();
 addContent15();
 addContent16();
+addContent17();
