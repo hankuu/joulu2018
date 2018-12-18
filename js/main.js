@@ -1356,6 +1356,84 @@ calWin.append("path")
 }//17th
 
 
+//////////////////////////
+// 18th:
+//////////////////////////
+function addContent18(){
+  let num = 17;
+  //change class to calWindowOpen
+  d3.select(calWindows[num].node())
+    .attr("class", "calWindowOpen")
+
+  //change title
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("18: 2nd pulse")
+
+  //container
+  let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
+  let padding = 5;
+  let width = +calWin.attr("width")-padding
+  let height = +calWin.attr("height")-padding
+
+  let side = width < height ? width : height;
+
+  let xVar = width/3;
+  let yVar = side/3;
+
+  let targetR = side/3;
+
+  let data = [];
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      data.push([xVar*(i+0.5),yVar*(j+0.5),randomBetween(3,9)])
+    }
+  }
+
+  //colorscale
+  let colorScale = d3.quantize(d3.interpolateViridis, 9);
+
+  //calculate duration
+  function getDuration(d,i){
+    return (i%2)*500 + 2000;
+  }
+
+
+  //handle pulse
+  function pulse() {
+  			var item = calWin.selectAll("path");
+  			(function repeat() {
+  				item = item.transition()
+          .duration(getDuration)
+            .attr("d", (d,i) => pathForPolygon(d[0],d[1],20,d[2],i%3===0?true:false))
+  					.transition()
+            .duration(getDuration)
+            .attr("d", (d,i) => pathForPolygon(d[0],d[1],randomBetween(10,30),d[2],i%3===0?true:false))
+  					.on("end", repeat);
+  			})();
+  }
+
+  //draw polygons
+      calWin.selectAll("path")
+      .data(data)
+      .enter()
+      .append("path")
+      .attr("d", (d,i) => pathForPolygon(d[0],d[1],20,d[2],i%3===0?true:false))
+      .attr("fill", function(d,i){
+        return colorScale[i];
+       })
+      .attr("stroke", function(d,i){
+        return colorScale[8-i];
+       })
+      .transition()
+      .duration(getDuration)
+        .attr('stroke-width', 0)
+        .attr("d", (d,i) => pathForPolygon(d[0],d[1],randomBetween(10,30),d[2],i%3===0?true:false))
+         .on("end", pulse);
+
+}//18th
+
+
+
+
 
 //////////////////////////
 //
@@ -1401,3 +1479,4 @@ addContent14();
 addContent15();
 addContent16();
 addContent17();
+addContent18();
