@@ -1431,6 +1431,132 @@ function addContent18(){
 
 }//18th
 
+//////////////////////////
+// 19th: bubbles in boxes
+//////////////////////////
+function addContent19(){
+  let num = 18;
+  //change class to calWindowOpen
+  d3.select(calWindows[num].node())
+    .attr("class", "calWindowOpen")
+
+  //change title
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("19: bubblox/palloota")
+
+  let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
+  //container
+  let width = +calWin.attr("width")
+  let height = +calWin.attr("height")
+
+  //controlling
+  let numOfBoxes = 3
+  let colors = ["red","yellow","orange"]
+
+
+  let data = {children: []}
+  //generate data
+  for(let i=0; i<19; i++){
+    // data.push({
+      data.children.push({
+        ordernum: i,
+        id: "box"+randomBetween(0,numOfBoxes-1),
+        value: randomBetween(10,100)
+      });
+  }
+
+
+  //draw boxes for bubbles
+  calWin.selectAll("rect")
+  .data(d3.range(numOfBoxes))
+  .enter()
+  .append("rect")
+  .attr("x",function(d){return 0+d*width/3;})
+  .attr("y",0)
+  .attr("width",width/3)
+  .attr("height",height)
+  .attr("id",d=>"box"+d)
+  .attr("fill",function(d) {return colors[d]})
+
+
+  let bubbles = d3.pack(data)
+                .size([width/3,height])
+                .padding(2)
+
+  let nodes = d3.hierarchy(data)
+                .sum(function(d){return d.value; })
+
+//box0
+  let node = calWin.selectAll(".box0")
+      .data(bubbles(nodes).descendants())
+      .enter()
+      .filter(function(d){
+        return !d.children;})
+      .append("g")
+      .attr("transform", function(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+      })
+      .append("circle")
+      .attr("r", (d) => d.r )
+      .attr("fill",function(d){
+        let c = "white";
+        if(d.data.id==="box1"){
+          c=colors[1]
+        }else if (d.data.id==="box2") {
+          c=colors[2]
+        }
+        return c;
+      })
+      .attr("class","box0")
+
+
+  //box1
+  node = calWin.selectAll(".box1")
+        .data(bubbles(nodes).descendants())
+        .enter()
+        .filter(function(d){
+          return !d.children;})
+        .append("g")
+        .attr("transform", function(d) {
+          return "translate(" + (d.x+width/3) + "," + d.y + ")";
+        })
+        .append("circle")
+        .attr("r", (d) => d.r )
+        .attr("fill",function(d){
+          let c = "white";
+          if(d.data.id==="box0"){
+            c=colors[0]
+          }else if (d.data.id==="box2") {
+            c=colors[2]
+          }
+          return c;
+        })
+        .attr("class","box1")
+
+    //box2
+    node = calWin.selectAll(".box2")
+          .data(bubbles(nodes).descendants())
+          .enter()
+          .filter(function(d){
+            return !d.children;})
+          .append("g")
+          .attr("transform", function(d) {
+            return "translate(" + (d.x+2*width/3) + "," + d.y + ")";
+          })
+          .append("circle")
+          .attr("r", (d) => d.r )
+          .attr("fill",function(d){
+            let c = "white";
+            if(d.data.id==="box0"){
+              c=colors[0]
+            }else if (d.data.id==="box1") {
+              c=colors[1]
+            }
+            return c;
+          })
+          .attr("class","box2")
+
+
+}//19th
 
 
 
@@ -1480,3 +1606,4 @@ addContent15();
 addContent16();
 addContent17();
 addContent18();
+addContent19();
