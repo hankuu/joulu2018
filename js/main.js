@@ -1559,6 +1559,67 @@ function addContent19(){
 }//19th
 
 
+//////////////////////////
+// 20th: Pascal trianle up to the row where 20 is the first time
+//////////////////////////
+function addContent20(){
+  let num = 19;
+  //change class to calWindowOpen
+  d3.select(calWindows[num].node())
+    .attr("class", "calWindowOpen")
+
+  //change title
+  d3.select(calWindows[num]._groups[0][0].childNodes[0]).text("20: Pascal")
+
+  let calWin = d3.select(calWindows[num]._groups[0][0].childNodes[1])
+
+  //container
+  let width = +calWin.attr("width")
+  let height = +calWin.attr("height")
+
+  //box size
+  let bWidth = width/7;
+  let bHeight = height/7;
+
+  //colors
+  let colors = d3.quantize(d3.interpolatePlasma,21)
+
+  //data
+  let data = [];
+  for (let i = 0; i < 7; i++) {
+    data[i] = [];
+    for(let j=0; j<(i+1); j++){
+      data[i].push({
+        x: bWidth*(3-i/2)+j*bWidth,
+        y: i*bHeight,
+        value: j===0?1:j===i?1:(data[i-1][j]).value+(data[i-1][j-1]).value
+      });
+    }
+  }
+
+
+  //rows
+  let rows = calWin.selectAll(".row")
+  .data(data)
+  .enter()
+  .append("g")
+  .attr("class","row")
+
+  //boxes
+  let box = rows.selectAll(".box")
+  .data(function(d){ return d;}) //get data out of rows
+  .enter()
+  .append("rect")
+  .attr("class","box")
+  .attr("x", d => d.x)
+  .attr("y", d => d.y)
+  .attr("width",bWidth)
+  .attr("height", bHeight)
+  .attr("fill", d => colors[d.value])
+  .attr("stroke", d => colors[21-d.value])
+  
+}//20th
+
 
 
 //////////////////////////
@@ -1607,3 +1668,4 @@ addContent16();
 addContent17();
 addContent18();
 addContent19();
+addContent20();
